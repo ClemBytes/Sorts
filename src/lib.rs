@@ -1,15 +1,9 @@
-pub fn insertion_sort<T: std::cmp::PartialOrd + Copy>(a: &mut [T])  {
+pub fn insertion_sort<T: std::cmp::PartialOrd>(a: &mut [T])  {
     let mut end = 0;
     while end < a.len() - 1 {
-        let new_value = a[end + 1];
         for i in 0..=end {
-            if new_value < a[i] {
-                // Moves everything behind by one place
-                for j in (i..=end).rev() {
-                    a[j + 1] = a[j];
-                }
-                // Insert new value
-                a[i] = new_value;
+            if a[end + 1] < a[i] {
+                a[i..=(end + 1)].rotate_right(1);
                 break;
             }
         }
