@@ -11,6 +11,24 @@ pub fn insertion_sort<T: PartialOrd>(a: &mut [T]) {
     }
 }
 
+pub fn selection_sort<T: PartialOrd + Copy>(a: &mut [T]) {
+    let mut end_position = 0;
+    while end_position < a.len() - 1 {
+        let mut smaller_value = a[end_position];
+        let mut smaller_index = end_position;
+        for (i, val) in a.iter().enumerate().skip(end_position + 1) {
+            if *val < smaller_value {
+                smaller_value = *val;
+                smaller_index = i;
+            }
+        }
+        if smaller_index != end_position {
+            a.swap(end_position, smaller_index);
+        }
+        end_position += 1;
+    }
+}
+
 #[cfg(test)]
 macro_rules! test_any_sort {
     ( $f:ident ) => {
@@ -80,4 +98,9 @@ macro_rules! test_any_sort {
 #[test]
 fn test_insertion_sort() {
     test_any_sort!(insertion_sort);
+}
+
+#[test]
+fn test_selection_sort() {
+    test_any_sort!(selection_sort);
 }
