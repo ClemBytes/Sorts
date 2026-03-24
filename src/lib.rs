@@ -29,6 +29,19 @@ pub fn selection_sort<T: PartialOrd + Copy>(a: &mut [T]) {
     }
 }
 
+pub fn bubble_sort<T: PartialOrd>(a: &mut [T]) {
+    let mut more_swaps = true;
+    while more_swaps {
+        more_swaps = false;
+        for i in 0..a.len() - 1 {
+            if a[i] > a[i + 1] {
+                a.swap(i, i + 1);
+                more_swaps = true;
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 macro_rules! test_any_sort {
     ( $f:ident ) => {
@@ -103,4 +116,9 @@ fn test_insertion_sort() {
 #[test]
 fn test_selection_sort() {
     test_any_sort!(selection_sort);
+}
+
+#[test]
+fn test_bubble_sort() {
+    test_any_sort!(bubble_sort);
 }
