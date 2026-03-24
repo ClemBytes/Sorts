@@ -1,4 +1,4 @@
-pub fn insertion_sort<T: std::cmp::PartialOrd>(a: &mut [T]) {
+pub fn insertion_sort<T: PartialOrd>(a: &mut [T]) {
     let mut end = 0;
     while end < a.len() - 1 {
         for i in 0..=end {
