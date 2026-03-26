@@ -42,6 +42,37 @@ pub fn bubble_sort<T: PartialOrd>(a: &mut [T]) {
     }
 }
 
+pub fn merge_sort<T: PartialOrd + Clone>(a: &mut [T]) {
+    fn merge_sort_rec<T: PartialOrd + Clone>(a: &[T]) -> Vec<T> {
+        if a.len() == 1 {
+            return a.to_vec();
+        }
+        let n = a.len() / 2;
+        let b = merge_sort_rec(&a[..n]);
+        let c = merge_sort_rec(&a[n..]);
+        let mut res = Vec::new();
+        let mut ib = 0;
+        let mut ic = 0;
+        while ib < b.len() && ic < c.len() {
+            if b[ib] < c[ic] {
+                res.push(b[ib].clone());
+                ib += 1;
+            } else {
+                res.push(c[ic].clone());
+                ic += 1;
+            }
+        }
+        if ib < b.len() {
+            res.extend_from_slice(&b[ib..]);
+        } else {
+            res.extend_from_slice(&c[ic..]);
+        }
+        res
+    }
+
+    a.clone_from_slice(&merge_sort_rec(a));
+}
+
 #[cfg(test)]
 macro_rules! test_any_sort {
     ( $f:ident ) => {
@@ -121,4 +152,9 @@ fn test_selection_sort() {
 #[test]
 fn test_bubble_sort() {
     test_any_sort!(bubble_sort);
+}
+
+#[test]
+fn test_merge_sort() {
+    test_any_sort!(merge_sort);
 }
