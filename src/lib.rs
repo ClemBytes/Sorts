@@ -11,14 +11,14 @@ pub fn insertion_sort<T: PartialOrd>(a: &mut [T]) {
     }
 }
 
-pub fn selection_sort<T: PartialOrd + Copy>(a: &mut [T]) {
+pub fn selection_sort<T: PartialOrd>(a: &mut [T]) {
     let mut end_position = 0;
     while end_position < a.len() - 1 {
-        let mut smaller_value = a[end_position];
+        let mut smaller_value = &a[end_position];
         let mut smaller_index = end_position;
         for (i, val) in a.iter().enumerate().skip(end_position + 1) {
-            if *val < smaller_value {
-                smaller_value = *val;
+            if val < smaller_value {
+                smaller_value = val;
                 smaller_index = i;
             }
         }
@@ -97,14 +97,14 @@ macro_rules! test_any_sort {
             ]
         );
 
-        // let mut a: Vec<String> = a.into_iter().map(String::from).collect();
-        // $f(&mut a);
-        // assert_eq!(
-        //     a,
-        //     [
-        //         "0", "1", "12", "2", "3", "4", "5", "6", "7", "8", "9", "AZ", "az"
-        //     ]
-        // );
+        let mut a: Vec<String> = a.into_iter().map(String::from).collect();
+        $f(&mut a);
+        assert_eq!(
+            a,
+            [
+                "0", "1", "12", "2", "3", "4", "5", "6", "7", "8", "9", "AZ", "az"
+            ]
+        );
     };
 }
 
