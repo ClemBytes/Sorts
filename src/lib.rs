@@ -43,17 +43,9 @@ pub fn bubble_sort<T: PartialOrd>(a: &mut [T]) {
 }
 
 pub fn merge_sort<T: PartialOrd + Clone>(a: &mut [T]) {
-    fn merge_sort_rec<T: PartialOrd + Clone>(a: &mut [T], buffer: &mut Vec<T>) {
-        if a.len() == 1 {
-            return;
-        }
-        let n = a.len() / 2;
-        merge_sort_rec(&mut a[..n], buffer);
-        merge_sort_rec(&mut a[n..], buffer);
+    fn merge<T: PartialOrd + Clone>(b: &[T], c: &[T], buffer: &mut Vec<T>) {
         buffer.clear();
-        let b = &a[..n];
         let mut ib = 0;
-        let c = &a[n..];
         let mut ic = 0;
         while ib < b.len() && ic < c.len() {
             if b[ib] < c[ic] {
@@ -69,7 +61,16 @@ pub fn merge_sort<T: PartialOrd + Clone>(a: &mut [T]) {
         } else {
             buffer.extend_from_slice(&c[ic..]);
         }
-        a.clone_from_slice(&buffer);
+    }
+    fn merge_sort_rec<T: PartialOrd + Clone>(a: &mut [T], buffer: &mut Vec<T>) {
+        if a.len() == 1 {
+            return;
+        }
+        let n = a.len() / 2;
+        merge_sort_rec(&mut a[..n], buffer);
+        merge_sort_rec(&mut a[n..], buffer);
+        merge(&a[..n], &a[n..], buffer);
+        a.clone_from_slice(buffer);
     }
     merge_sort_rec(a, &mut Vec::with_capacity(a.len()));
 }
