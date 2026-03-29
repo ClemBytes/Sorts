@@ -75,6 +75,33 @@ pub fn merge_sort<T: PartialOrd + Clone>(a: &mut [T]) {
     merge_sort_rec(a, &mut Vec::with_capacity(a.len()));
 }
 
+pub fn quick_sort<T: PartialOrd>(a: &mut [T]) {
+    if a.len() <= 1 {
+        return;
+    }
+
+    // Choose pivot: last element
+    let mut pivot_index = a.len() - 1;
+
+    // First reorder before and after pivot
+    let mut i = 0;
+    while i < pivot_index {
+        if a[i] <= a[pivot_index] {
+            i += 1;
+            continue;
+        }
+
+        // a[i] > pivot
+        a.swap(i, pivot_index - 1);
+        a.swap(pivot_index - 1, pivot_index);
+        pivot_index -= 1;
+    }
+
+    // Then call recursively on sur-arrays
+    quick_sort(&mut a[..pivot_index]);
+    quick_sort(&mut a[pivot_index + 1..]);
+}
+
 #[cfg(test)]
 macro_rules! test_any_sort {
     ( $f:ident ) => {
@@ -159,4 +186,9 @@ fn test_bubble_sort() {
 #[test]
 fn test_merge_sort() {
     test_any_sort!(merge_sort);
+}
+
+#[test]
+fn test_quick_sort() {
+    test_any_sort!(quick_sort);
 }
