@@ -102,6 +102,36 @@ pub fn quick_sort<T: PartialOrd>(a: &mut [T]) {
     quick_sort(&mut a[pivot_index + 1..]);
 }
 
+pub fn heap_sort<T: PartialOrd>(a: &mut [T]) {
+    fn i_parent(i: usize) -> usize {
+        (i - 1) / 2
+    }
+
+    fn heapify<T: PartialOrd>(a: &mut [T]) {
+        let mut finished = false;
+        while !finished {
+            finished = true;
+            for i in 1..a.len() {
+                let parent = i_parent(i);
+                if a[i] > a[parent] {
+                    a.swap(i, parent);
+                    finished = false;
+                }
+            }
+        }
+    }
+
+    heapify(a);
+
+    let mut ilast = a.len() - 1;
+    while ilast > 0 {
+        a.swap(0, ilast);
+        ilast -= 1;
+
+        heapify(&mut a[..=ilast]);
+    }
+}
+
 #[cfg(test)]
 macro_rules! test_any_sort {
     ( $f:ident ) => {
@@ -195,4 +225,9 @@ fn test_merge_sort() {
 #[test]
 fn test_quick_sort() {
     test_any_sort!(quick_sort);
+}
+
+#[test]
+fn test_heap_sort() {
+    test_any_sort!(heap_sort);
 }
